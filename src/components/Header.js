@@ -163,8 +163,8 @@ export default class Header extends Component {
                                   <li className="user-footer">
                                     <div className="text-center">
                                       <Link to="/profile" className="btn btn-primary btn-flat" style={aStyle}><i className="fa fa-black-tie"></i> Profile</Link>
-                                      <a href="admin.html" className="btn btn-warning btn-flat" style={aStyle}>
-                                        <i className="fa fa-expeditedssl"></i> Admin Area</a><br />
+                                      <Link to="/admin" className="btn btn-warning btn-flat" style={aStyle}><i className="fa fa-expeditedssl"></i> Admin Area</Link>
+                                      <br />
                                       <Link to="/login" className="btn btn-danger btn-flat" style={aStyle}><i className="fa fa-sign-out"></i> Sign out</Link>
                                     </div>
                                   </li>

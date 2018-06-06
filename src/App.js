@@ -6,6 +6,8 @@ import Product from './components/Product';
 import Cart from './components/Cart';
 import Login from './components/Login';
 import Register from './components/Register';
+import Admin from './components/Admin';
+import SideBar from './components/SideBar';
 import Profile from './components/Profile';
 import Detail from './components/Detail';
 import Footer from './components/Footer';
@@ -22,6 +24,7 @@ class App extends Component {
           <Route path="/profile" component={Profile}/>
           <Route path="/login" component={Login}/>
           <Route path="/register" component={Register}/>
+          <Route path="/admin" component={Admin}/>
         </div>
     );
   }
