@@ -3,6 +3,10 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
+import MasterCard from './mastercard.png';
+import Visa from './visa.png';
+import Doku from './doku.png';
+import Gopay from './gopay.jpg';
 
 class Content extends Component {
     render(){
@@ -20,7 +24,7 @@ class Content extends Component {
                                 <div className="hover panel">
                                     <div className="front">
                                         <div className="frontTitle">
-                                            <a href="#" style={{textDecoration:'none'}}>Produk</a>
+                                            <a href="#" style={{textDecoration:'none'}}>Tools</a>
                                         </div>
                                         <a href="#">
                                             <div className="frontLogo kategori8">
@@ -31,7 +35,7 @@ class Content extends Component {
                                 <div className="hover panel">
                                     <div className="front">
                                         <div className="frontTitle">
-                                            <a href="#" style={{textDecoration:'none'}}>Produk</a>
+                                            <a href="#" style={{textDecoration:'none'}}>Safety & Security</a>
                                         </div>
                                         <a href="#">
                                             <div className="frontLogo kategori1">
@@ -42,7 +46,7 @@ class Content extends Component {
                                 <div className="hover panel">
                                     <div className="front">
                                         <div className="frontTitle">
-                                            <a href="#" style={{textDecoration:'none'}}>Produk</a>
+                                            <a href="#" style={{textDecoration:'none'}}>Smarthome</a>
                                         </div>
                                         <a href="#">
                                             <div className="frontLogo kategori2">
@@ -53,7 +57,7 @@ class Content extends Component {
                                 <div className="hover panel">
                                     <div className="front">
                                         <div className="frontTitle">
-                                            <a href="#" style={{textDecoration:'none'}}>Produk</a>
+                                            <a href="#" style={{textDecoration:'none'}}>Applicances</a>
                                         </div>
                                         <a href="#">
                                             <div className="frontLogo kategori3">
@@ -64,7 +68,7 @@ class Content extends Component {
                                 <div className="hover panel">
                                     <div className="front">
                                         <div className="frontTitle">
-                                            <a href="#" style={{textDecoration:'none'}}>Produk</a>
+                                            <a href="#" style={{textDecoration:'none'}}>Lighting</a>
                                         </div>
                                         <a href="#">
                                             <div className="frontLogo kategori4">
@@ -75,7 +79,7 @@ class Content extends Component {
                                 <div className="hover panel">
                                     <div className="front">
                                         <div className="frontTitle">
-                                            <a href="#" style={{textDecoration:'none'}}>Produk</a>
+                                            <a href="#" style={{textDecoration:'none'}}>Kitchen</a>
                                         </div>
                                         <a href="#">
                                             <div className="frontLogo kategori5">
@@ -86,7 +90,7 @@ class Content extends Component {
                                 <div className="hover panel">
                                     <div className="front">
                                         <div className="frontTitle">
-                                            <a href="#" style={{textDecoration:'none'}}>Produk</a>
+                                            <a href="#" style={{textDecoration:'none'}}>Electrical</a>
                                         </div>
                                         <a href="#">
                                             <div className="frontLogo kategori6">
@@ -97,7 +101,7 @@ class Content extends Component {
                                 <div className="hover panel">
                                     <div className="front">
                                         <div className="frontTitle">
-                                            <a href="#" style={{textDecoration:'none'}}>Produk</a>
+                                            <a href="#" style={{textDecoration:'none'}}>Wall Treatments</a>
                                         </div>
                                         <a href="#">
                                             <div className="frontLogo kategori7">
@@ -780,61 +784,76 @@ class Content extends Component {
                     <section className="content"></section>
                 </div>            
             </div>
-            <section className="contact" style={{paddingTop: '30px'}}>
-                <div className="col-md-4">
-                    <h3>Contact Us</h3>
-                    <address>
-                    <ul className="list-unstyled">
-                        <li>Menara SunLife
-                        <br/> Jakarta, JKT 222222</li>
-                        <li>Phone: (1800) 765 - 4321</li>
-                        <li>Email: email@yourdomain.com</li>
-                    </ul>
-                    </address>
-                </div>
-                <div className="col-md-4">
-                    <div className="newsletter">
-                    <h3 className="footer-heading">Newsletter</h3>
-                    <p>Dapatkan info dan update terbaru</p>
-                    <form className="newsletter-form" method="POST">
-                        <div className="input-group input-group-lg">
-                        <input type="email" className="form-control" name="email" placeholder="masukan alamat email anda"/>
-                        <span className="input-group-btn">
-                            <button className="btn btn-primary" type="button">
-                            <i className="fa fa-spinner fa-spin"></i>
-                            <span>SUBSCRIBE</span>
-                            </button>
-                        </span>
-                        </div>
-                        <div className="alert"></div>
-                    </form>
+            <section className="contact" style={{paddingTop: '10px', paddingBottom: '20px'}}>
+                <div className="container">
+                    <div className="col-md-3">
+                        <h3>About Us</h3>
+                        <hr style={{border: '1px solid white', marginTop: '-5px'}}/>
+                        <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.</p>
                     </div>
-                </div>
-                <div className="col-md-4">
-                    <div className="social-connect">
-                    <h3>Social Media Links</h3>
-                    <ul className="list-inline social-icons" style={{marginTop: '30px'}}>
-                        <li>
-                        <a href="#" className="facebook-bg">
-                            <i className="fa fa-facebook"></i>
-                        </a>
-                        </li>
-                        <li>
-                        <a href="#" className="twitter-bg">
-                            <i className="fa fa-twitter"></i>
-                        </a>
-                        </li>
-                        <li>
-                        <a href="#" className="googleplus-bg">
-                            <i className="fa fa-google-plus"></i>
-                        </a>
-                        </li>
-                        <li>
-                        <a href="#" className="rss-bg">
-                            <i className="fa fa-rss"></i>
-                        </a>
-                        </li>
-                    </ul>
+                    <div className="col-md-3">
+                        <h3>Contact Us</h3>
+                        <hr style={{border: '1px solid white', marginTop: '-5px'}}/>
+                        <address>
+                            <ul className="list-unstyled">
+                                <li>Menara SunLife
+                                <br/> Jakarta, JKT 222222</li>
+                                <li>Phone: (1800) 765 - 4321</li>
+                                <li>Email: email@yourdomain.com</li>
+                            </ul>
+                        </address>
+                    </div>
+                    <div className="col-md-3">
+                        <h3>Social Media</h3>
+                        <hr style={{border: '1px solid white', marginTop: '-5px'}}/>
+                        <ul className="list-inline social-icons" style={{marginTop: '30px'}}>
+                            <li>
+                                <a href="#" className="facebook-bg">
+                                    <i className="fa fa-facebook"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" className="twitter-bg">
+                                    <i className="fa fa-twitter"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" className="googleplus-bg">
+                                    <i className="fa fa-google-plus"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" className="rss-bg">
+                                    <i className="fa fa-rss"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div className="col-md-3">
+                        <h3>Payment Method</h3>
+                        <hr style={{border: '1px solid white', marginTop: '-5px'}}/>
+                        <ul className="list-inline social-icons" style={{marginTop: '30px'}}>
+                            <li>
+                                <a href="#">
+                                    <img src={MasterCard} width="50" height="50"/>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <img src={Visa} width="50" height="50"/>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" className="googleplus-bg">
+                                    <img src={Doku} width="50" height="50"/>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" className="rss-bg">
+                                    <img src={Gopay} width="90" height="50"/>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </section>

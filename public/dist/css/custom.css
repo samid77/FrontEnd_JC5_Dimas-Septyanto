@@ -78,7 +78,7 @@
 }
 
 .kategori1 {
-  background-image: url('fashion.png');
+  background-image: url('security.png');
   background-size: 50px 50px;
 }
 
@@ -88,20 +88,20 @@
 }
 
 .kategori3 {
-  background-image: url('camera.png');
+  background-image: url('washing.png');
   background-size: 50px 50px;
 }
 
 .kategori4 {
-  background-image: url('laptop.png');
+  background-image: url('light.png');
   background-size: 50px 50px;
 }
 .kategori5 {
-  background-image: url('shoes.png');
+  background-image: url('microwave.png');
   background-size: 50px 50px;
 }
 .kategori6 {
-  background-image: url('ticket.png');
+  background-image: url('electrical.png');
   background-size: 50px 50px;
 }
 .kategori7 {
