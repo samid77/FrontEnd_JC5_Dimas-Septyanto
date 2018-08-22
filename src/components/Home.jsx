@@ -1,18 +1,18 @@
 // Content.js
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import Header from './Header';
-import Footer from './Footer';
-import MasterCard from './mastercard.png';
-import Visa from './visa.png';
-import Doku from './doku.png';
-import Gopay from './gopay.jpg';
+import Navbar from './Navbar';
+import Footers from './Footers';
+import MasterCard from './pics/mastercard.png';
+import Visa from './pics/visa.png';
+import Doku from './pics/doku.png';
+import Gopay from './pics/gopay.jpg';
 
-class Content extends Component {
+class Home extends Component {
     render(){
         return (
         <div>
-            <Header />
+            <Navbar />
             <div className="content-wrapper">
                 <div className="container">
                     <section className="content">
@@ -857,9 +857,9 @@ class Content extends Component {
                     </div>
                 </div>
             </section>
-            <Footer />
+         <Footers />
         </div>
         );
     }
 }
-export default Content;
+export default Home;

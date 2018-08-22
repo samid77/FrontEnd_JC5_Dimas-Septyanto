@@ -35,7 +35,6 @@ export default class Header extends Component {
 
                       <div className="navbar-custom-menu">
                           <ul className="nav navbar-nav">
-                              
                               <li className="dropdown messages-menu">
                                 <a href="#" className="dropdown-toggle" data-toggle="dropdown">
                                   <i className="fa fa-cart-arrow-down"></i>

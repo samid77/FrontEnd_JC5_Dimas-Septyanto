@@ -1,14 +1,13 @@
 // Cart.js
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import Header from './Header';
-import Footer from './Footer';
+import Navbar from './Navbar';
 
 class Invoice extends Component {
     render(){
         return(
             <div>
-            <Header />
+            <Navbar />
                 <div className="content-wrapper">
                     <div className="container">
                         <div className="col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
@@ -122,7 +121,7 @@ class Invoice extends Component {
                         </div>
                     </div>
                 </div>
-            <Footer />
+            
             </div>
         );
     }

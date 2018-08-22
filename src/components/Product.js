@@ -1,14 +1,14 @@
 //Product List
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import Header from './Header';
-import Footer from './Footer';
+import Navbar from './Navbar';
+
 
 class Product extends Component {
     render(){
         return(
             <div>
-              <Header />
+              <Navbar />
               <div className="content-wrapper">
                   <div className="container">
                       <section className="content">
@@ -571,7 +571,7 @@ class Product extends Component {
                       </section>
                   </div>
               </div>
-              <Footer />
+              
             </div>
         )
     }

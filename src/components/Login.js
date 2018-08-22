@@ -1,8 +1,6 @@
 // Login.js
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import Header from './Header';
-import Footer from './Footer';
 
 class Login extends Component {
     render(){
@@ -27,13 +25,12 @@ class Login extends Component {
                             </div>
                             <div className="row">
                                 <div className="col-xs-4">
-                                    <a href="index.html" className="btn btn-primary btn-block btn-flat">Sign In</a>
+                                    <a href="index.html" className="btn btn-primary btn-block btn-flat"><i className="fa fa-paper-plane"></i> Login</a>
                                 </div>
                             </div>
                         </form>
-                        <a href="#">I forgot my password</a>
                         <br />
-                        <Link to="/register" className="text-center">Register a new membership</Link>
+                        <Link to="/register" className="text-center">Daftar Anggota Baru</Link>
                     </div>
                     {/* /.login-box-body */}
                 </div>

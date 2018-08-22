@@ -1,34 +1,27 @@
 import React, { Component } from 'react';
 import {Link, Route} from 'react-router-dom';
-import Header from './components/Header';
-import Content from './components/Content';
+import Home from './components/Home';
+import ShoppingCart from './components/ShoppingCart';
 import Product from './components/Product';
-import Cart from './components/Cart';
 import Login from './components/Login';
 import Register from './components/Register';
-import Admin from './components/Admin';
-import AddProduct from './components/AddProduct';
 import Invoice from './components/Invoice';
-import SideBar from './components/SideBar';
 import Profile from './components/Profile';
 import Detail from './components/Detail';
-import Footer from './components/Footer';
 import './App.css';
 
 class App extends Component {
   render() {
     return (
         <div>
-          <Route exact path="/" component={Content}/>
+          <Route exact path="/" component={Home}/>
           <Route path="/product" component={Product}/>
+          <Route path="/cart" component={ShoppingCart}/>
           <Route path="/detail" component={Detail}/>
-          <Route path="/cart" component={Cart}/>
           <Route path="/profile" component={Profile}/>
           <Route path="/invoice" component={Invoice}/>
           <Route path="/login" component={Login}/>
           <Route path="/register" component={Register}/>
-          <Route path="/admin" component={Admin}/>
-          <Route path="/addproduct" component={AddProduct}/>
         </div>
     );
   }

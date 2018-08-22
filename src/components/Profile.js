@@ -1,14 +1,14 @@
 // Profile.js
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import Header from './Header';
-import Footer from './Footer';
+import Navbar from './Navbar';
+
 
 class Profile extends Component {
     render(){
         return(
             <div>
-                <Header />
+                <Navbar />
                 <div className="content-wrapper">
                     <div className="container">
                         {/* Content Header (Page header) */}
@@ -156,7 +156,7 @@ class Profile extends Component {
                         </section>
                     </div>
                 </div>
-                <Footer />
+                
             </div>
         );
     }
