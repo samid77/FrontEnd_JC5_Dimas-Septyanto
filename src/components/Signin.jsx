@@ -5,10 +5,10 @@ class Signin extends Component {
   render() {
     return (
         <div>
-            <div className="content-wrapper">
-                <div className="login-box">
+            <div className="content-wrapper" style={{fontSize: '18px'}}>
+                <div className="login-box" style={{minHeight: '800px'}}>
                     <div className="login-logo">
-                        <a href="index.html">
+                        <a href="#">
                         <b id="brand">Wise</b>Monkey</a>
                     </div>
                     {/* /.login-logo */}
@@ -23,14 +23,12 @@ class Signin extends Component {
                                 <input className="form-control" placeholder="Password" type="password" />
                                 <span className="glyphicon glyphicon-lock form-control-feedback" />
                             </div>
-                            <div className="row">
-                                <div className="col-xs-4">
-                                    <a href="index.html" className="btn btn-primary btn-block btn-flat"><i className="fa fa-paper-plane"></i> Login</a>
-                                </div>
+                            <div className="form-group has-feedback">
+                                <Link to="/" className="btn btn-primary btn-block btn-flat"><i className="fa fa-paper-plane"></i> Login</Link>
+                                <Link to="/registration" className="btn btn-success btn-block">Daftar Anggota Baru</Link>
                             </div>
                         </form>
-                        <br />
-                        <Link to="/register" className="text-center">Daftar Anggota Baru</Link>
+                        
                     </div>
                     {/* /.login-box-body */}
                 </div>

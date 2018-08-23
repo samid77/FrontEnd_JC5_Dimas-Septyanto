@@ -164,7 +164,7 @@ export default class Header extends Component {
                                   </li>
                                   <li className="user-footer">
                                     <div className="text-center">
-                                      <Link to="/profile" className="btn btn-success btn-flat" style={aStyle}><i className="fa fa-user"></i> Profile</Link>&nbsp;
+                                      <Link to="/userprofile" className="btn btn-success btn-flat" style={aStyle}><i className="fa fa-user"></i> Profile</Link>&nbsp;
                                       <Link to="/login" className="btn btn-danger btn-flat" style={aStyle}><i className="fa fa-sign-out"></i> Sign out</Link>
                                     </div>
                                   </li>
