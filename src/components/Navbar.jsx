@@ -31,6 +31,9 @@ export default class Header extends Component {
                                   </span>
                               </div>
                           </form>
+                          <ul className="nav navbar-nav">
+                            <li><Link to="/signin"><i className="fa fa-user"></i> Login / Register</Link></li>
+                          </ul>
                       </div>
 
                       <div className="navbar-custom-menu">
@@ -161,9 +164,7 @@ export default class Header extends Component {
                                   </li>
                                   <li className="user-footer">
                                     <div className="text-center">
-                                      <Link to="/profile" className="btn btn-primary btn-flat" style={aStyle}><i className="fa fa-black-tie"></i> Profile</Link>
-                                      <Link to="/admin" className="btn btn-warning btn-flat" style={aStyle}><i className="fa fa-expeditedssl"></i> Admin Area</Link>
-                                      <br />
+                                      <Link to="/profile" className="btn btn-success btn-flat" style={aStyle}><i className="fa fa-user"></i> Profile</Link>&nbsp;
                                       <Link to="/login" className="btn btn-danger btn-flat" style={aStyle}><i className="fa fa-sign-out"></i> Sign out</Link>
                                     </div>
                                   </li>

@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import {Link, Route} from 'react-router-dom';
 import Home from './components/Home';
+import DetailProduct from './components/DetailProduct';
+import ProductList from './components/ProductsList';
+import DiscountList from './components/DiscountList';
 import ShoppingCart from './components/ShoppingCart';
-import Product from './components/Product';
-import Login from './components/Login';
-import Register from './components/Register';
-import Invoice from './components/Invoice';
-import Profile from './components/Profile';
-import Detail from './components/Detail';
+import SearchResults from './components/SearchResults';
+import Signin from './components/Signin';
 import './App.css';
 
 class App extends Component {
@@ -15,13 +14,12 @@ class App extends Component {
     return (
         <div>
           <Route exact path="/" component={Home}/>
-          <Route path="/product" component={Product}/>
+          <Route path="/productlist" component={ProductList}/>
+          <Route path="/discountlist" component={DiscountList}/>
+          <Route path="/detailproduct" component={DetailProduct}/>
           <Route path="/cart" component={ShoppingCart}/>
-          <Route path="/detail" component={Detail}/>
-          <Route path="/profile" component={Profile}/>
-          <Route path="/invoice" component={Invoice}/>
-          <Route path="/login" component={Login}/>
-          <Route path="/register" component={Register}/>
+          <Route path="/searchresults" component={SearchResults}/>
+          <Route path="/signin" component={Signin}/>
         </div>
     );
   }

@@ -132,7 +132,7 @@
 }
 
 .col-item:hover .info {
-  background-color: #F5F5DC;
+  /* background-color: #F5F5DC; */
 }
 
 .col-item .price {
@@ -548,4 +548,26 @@ ul.social-icons li a i {
 }
 .whiteColor {
   color: #fff !important;
+}
+.al-btn a {
+  color: rgb(255, 255, 255);
+  font-size: 13px;
+  background: rgb(83, 83, 83);
+  padding: 10px 30px;
+  text-decoration:none;
+}
+.al-btn:hover a {
+  color: rgb(255, 255, 255);
+  font-size: 13px;
+  background: #69C76A;
+  padding: 10px 30px;
+  text-decoration:none;
+}
+.produk {
+  font-weight: 800;
+  font-size: 17px;
+  color: #226625;
+}
+.hargaproduk {
+  color: #406da4;
 }
