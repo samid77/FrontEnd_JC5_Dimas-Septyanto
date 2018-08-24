@@ -9,7 +9,7 @@ class UserProfile extends Component {
         <Navbar />
         <div className="content-wrapper">
             <div className="container">
-                <section className="content" style={{minHeight: '500px'}}>
+                <section className="content" style={{minHeight: '700px'}}>
                     <div className="row">
                         <div className="col-md-3">
                             <div className="box box-primary">
