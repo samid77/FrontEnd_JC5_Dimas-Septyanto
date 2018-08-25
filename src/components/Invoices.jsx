@@ -1,14 +1,44 @@
 import React, { Component } from 'react'
+import {Link, Redirect} from 'react-router-dom'
 import Navbar from './Navbar';
 import Footers from './Footers';
 import Ok from './pics/ok.png';
 import monkey from './pics/monkey.png';
+import Cookies from 'universal-cookie';
+import axios from 'axios';
+
+const cookies = new Cookies();
 
 class Invoices extends Component {
+ state = {
+    fullname: '',
+    username:'',
+    userphoto: '',
+    userID: '',
+    isLoggedin: false,
+    loginbutton: <li><Link to="/signin"><i className="fa fa-user"></i> Login / Register</Link></li>,
+    profileArea: false,
+  }
+  componentWillMount = () => {
+    if(cookies.get('userSession') !== undefined) {
+        axios.post('http://localhost:8005/getUserData', {
+            userID: cookies.get('userSession')
+        }).then((response) => {
+            this.setState({
+                isLoggedin: true,
+                loginbutton: <li></li>,
+                userID: response.data[0].id,
+                fullname: response.data[0].full_name,
+                userphoto: response.data[0].user_image,
+                profileArea: true,
+            })
+        })
+    }
+  }
   render() {
     return (
       <div>
-          <Navbar />
+          <Navbar loginbutton={this.state.loginbutton} fullname={this.state.fullname} userphoto={this.state.userphoto} profile={this.props.profileArea}/>
           <div className="content-wrapper">
             <div className="container">
                 <section className="content" style={{minHeight: '500px'}}>

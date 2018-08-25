@@ -156,6 +156,7 @@ class ShoppingCart extends Component {
       var productName = isi.product_name;
       var quantity = isi.quantity;
       var price = isi.product_price;
+      var image = isi.product_image;
       var total = this.state.totalPerItem;
 
       for(var i=0; i < total.length; i++){
@@ -168,7 +169,7 @@ class ShoppingCart extends Component {
       <td data-th="Product">
         <div className="row">
           <div className="col-sm-2 hidden-xs">
-            <img src={photo} alt="..." className="img-responsive" />
+            <img src={`http://localhost:8005/pics/`+image} alt="..." className="img-responsive" />
           </div>
           <div className="col-sm-10">
             <h4>{productName}</h4>

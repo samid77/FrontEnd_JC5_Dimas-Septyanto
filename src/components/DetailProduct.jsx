@@ -78,6 +78,7 @@ class DetailProduct extends Component {
             productname: order.productname.value,
             productprice: order.productprice.value,
             productcode: order.productcode.value,
+            productimage: order.productimage.value,
         }).then((response) => {
             var storestat = response.data;
             if(storestat === 1){
@@ -106,6 +107,7 @@ class DetailProduct extends Component {
         var productcode = isi.product_code;
         var nama = isi.product_name;
         var harga = isi.price;
+        var gambar = isi.fotoproduk_1;
         var deskripsi = isi.description;
         return <div className="box-body">
             <h2>{nama}</h2>
@@ -120,6 +122,7 @@ class DetailProduct extends Component {
                 <input className="text-center styleproddet" ref="idproduct" type="hidden" value={idproduct}/>
                 <input className="text-center styleproddet" ref="productcode" type="hidden" value={productcode}/>
                 <input className="text-center styleproddet" ref="productname" type="hidden" value={nama}/>
+                <input className="text-center styleproddet" ref="productimage" type="hidden" value={gambar}/>
                 <input className="text-center styleproddet" ref="productprice" type="hidden" value={harga}/>
                 <span className="input-group-btn">
                     <button type="button" onClick={() => this.increment()} className="btn btn-flat btn-default btn-number">
