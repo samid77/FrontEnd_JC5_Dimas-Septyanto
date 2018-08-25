@@ -65,6 +65,7 @@ class Home extends Component {
         }
         const featuredProductOne = featuredOne.map((isi, index) => {
             var id = index + 1;
+            var productID = isi.id;
             var nama = isi.product_name;
             var harga = isi.price;
             var fotoproduk = isi.fotoproduk_1;
@@ -81,7 +82,7 @@ class Home extends Component {
                         </div>
                     </div>
                     <div className="al-btn text-center">
-                        <Link to="/detailproduct">Buy Product</Link>
+                        <Link to={{pathname: '/detailproduct/'+productID, state:{productID: productID}}}>Buy Product</Link>
                     </div>
                 </div>
             </div>
