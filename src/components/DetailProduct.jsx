@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
-import Cookies from 'universal-cookie';
-import {Link} from 'react-router-dom'
+import {Link, Redirect} from 'react-router-dom'
 import Navbar from './Navbar'
 import Footers from './Footers'
 import photo from './pics/DEWALT_001.jpg'
 import axios from 'axios'
+import Cookies from 'universal-cookie';
 const cookies = new Cookies();
 
 class DetailProduct extends Component {
   state = {
-      quantity: 0,
+      quantity: 1,
       detailData: [],
       productImage: [],
       fullname: '',
@@ -19,22 +19,10 @@ class DetailProduct extends Component {
       isLoggedin: false,
       loginbutton: <li><Link to="/signin"><i className="fa fa-user"></i> Login / Register</Link></li>,
       profileArea: false,
+      redirectCart: false,
+      redirectLogin: false,
   }
-  increment = () => {
-      this.setState({
-          quantity: this.state.quantity + 1
-      })
-      console.log('incement')
-      console.log(this.state.quantity)
-  }
-  decrement = () => {
-    this.setState({
-        quantity: this.state.quantity - 1
-    })
-    console.log('decrement')
-    console.log(this.state.quantity)
-}
-componentWillMount = () => {
+  componentWillMount = () => {
     if(cookies.get('userSession') !== undefined) {
         axios.post('http://localhost:8005/getUserData', {
             userID: cookies.get('userSession')
@@ -57,10 +45,65 @@ componentWillMount = () => {
             productImage: getData.data
         });
     })
-}
+  }
+  Quantity = (e) => {
+      this.setState({
+          quantity: e.target.value
+      });
+  }
+  increment = () => {
+        this.setState({
+            quantity: this.state.quantity + 1
+        })
+  }
+  decrement = () => {
+    this.setState({
+        quantity: this.state.quantity - 1
+    })
+    if(this.state.quantity < 2){
+        this.setState({
+            quantity: 1
+        });
+    }
+  }
+  addToCart = (order) => {
+    const cookie = new Cookies();
+    var userID = cookie.get('userSession');
+
+    if(userID !== undefined){
+        axios.post('http://localhost:8005/cart', {
+            userID: userID,
+            num: order.quantity.value,
+            idproduct: order.idproduct.value,
+            productname: order.productname.value,
+            productprice: order.productprice.value,
+            productcode: order.productcode.value,
+        }).then((response) => {
+            var storestat = response.data;
+            if(storestat === 1){
+                this.setState({
+                    redirectCart: true
+                });
+            }
+        })
+    } else {
+        this.setState({
+            redirectLogin: true
+        });
+    }
+
+  }
   render() {
+    if(this.state.redirectCart){
+        return <Redirect to="/cart"/>
+    }
+    if(this.state.redirectLogin){
+        return <Redirect to="/signin"/>
+    }
     const productDetail = this.state.detailData.map((isi, index) => {
         var urutan = index + 1;
+        var idproduct = isi.id;
+        var productcode = isi.product_code;
         var nama = isi.product_name;
         var harga = isi.price;
         var deskripsi = isi.description;
@@ -69,19 +112,23 @@ componentWillMount = () => {
             <h3><b>Rp.{harga}</b></h3>
             <div className="input-group" style={{width: '150px', marginTop: '30px'}}>
                 <span className="input-group-btn">
-                    <button type="button" onClick={this.decrement} className="btn btn-flat btn-default btn-number">
+                    <button type="button" onClick={() => this.decrement()} className="btn btn-flat btn-default btn-number">
                     <span className="glyphicon glyphicon-minus" />
                     </button>
                 </span>
-                <input type="text" className="form-control input-number" defaultValue={this.state.quantity} style={{textAlign: 'center'}}/>
+                <input type="text" ref="quantity" className="form-control input-number" value={this.state.quantity} style={{textAlign: 'center'}}/>
+                <input className="text-center styleproddet" ref="idproduct" type="hidden" value={idproduct}/>
+                <input className="text-center styleproddet" ref="productcode" type="hidden" value={productcode}/>
+                <input className="text-center styleproddet" ref="productname" type="hidden" value={nama}/>
+                <input className="text-center styleproddet" ref="productprice" type="hidden" value={harga}/>
                 <span className="input-group-btn">
-                    <button type="button" onClick={this.increment} className="btn btn-flat btn-default btn-number">
+                    <button type="button" onClick={() => this.increment()} className="btn btn-flat btn-default btn-number">
                     <span className="glyphicon glyphicon-plus" />
                     </button>
                 </span>
             </div>
             <div style={{marginTop: '20px'}}>
-                <Link to="/cart"><button className="btn-lg btn-success btn-block btn-flat"><i className="fa fa-shopping-cart"></i> Add to cart</button></Link>
+                <button onClick={()=>this.addToCart(this.refs)} className="btn-lg btn-success btn-block btn-flat"><i className="fa fa-shopping-cart"></i> Add to cart</button>
             </div>
             <div style={{marginTop: '20px'}}>
                 <dl>
@@ -115,42 +162,12 @@ componentWillMount = () => {
                             <div className="box box-widget">
                                 <div className="box-body">
                                     {productImage}
-                                    {/* <img className="img-responsive pad" src={photo} alt="Photo" /> */}
                                 </div>
                             </div>
                         </div>
                         <div className="col-md-6">
                             <div className="box box-widget">
                                 {productDetail}
-                                {/* <div className="box-body">
-                                    <h2>DEWALT DW745 10-Inch Compact Job-Site Table Saw with 20-Inch Max Rip Capacity - 120V</h2>
-                                    <h3><b>Rp.545.000,00</b></h3>
-                                    <div className="input-group" style={{width: '150px', marginTop: '30px'}}>
-                                        <span className="input-group-btn">
-                                            <button type="button" onClick={this.decrement} className="btn btn-flat btn-default btn-number">
-                                            <span className="glyphicon glyphicon-minus" />
-                                            </button>
-                                        </span>
-                                        <input type="text" className="form-control input-number" defaultValue={this.state.quantity} style={{textAlign: 'center'}}/>
-                                        <span className="input-group-btn">
-                                            <button type="button" onClick={this.increment} className="btn btn-flat btn-default btn-number">
-                                            <span className="glyphicon glyphicon-plus" />
-                                            </button>
-                                        </span>
-                                    </div>
-                                    <div style={{marginTop: '20px'}}>
-                                        <Link to="/cart"><button className="btn-lg btn-success btn-block btn-flat"><i className="fa fa-shopping-cart"></i> Add to cart</button></Link>
-                                    </div>
-                                    <div style={{marginTop: '20px'}}>
-                                        <dl>
-                                            <dt><h3><b>Description lists</b></h3></dt>
-                                            <dd><h4>A description list is perfect for defining terms. A description list is perfect for defining terms. A description list is perfect for defining terms</h4></dd>
-                                            <dt><h3><b>Specification</b></h3></dt>
-                                            <dd><h4>A description list is perfect for defining terms. A description list is perfect for defining terms. A description list is perfect for defining terms</h4></dd>
-                                            
-                                        </dl>
-                                    </div>
-                                </div> */}
                             </div>
                         </div>
                     </div>
