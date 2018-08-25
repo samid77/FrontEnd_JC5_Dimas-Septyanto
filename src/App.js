@@ -8,6 +8,7 @@ import ShoppingCart from './components/ShoppingCart';
 import Checkout from './components/Checkout';
 import SearchResults from './components/SearchResults';
 import Signin from './components/Signin';
+import Signout from './components/Signout';
 import Invoices from './components/Invoices';
 import UserProfile from './components/UserProfile';
 import Registration from './components/Registration';
@@ -26,6 +27,7 @@ class App extends Component {
           <Route path="/checkout" component={Checkout}/>
           <Route path="/searchresults" component={SearchResults}/>
           <Route path="/signin" component={Signin}/>
+          <Route path="/signout" component={Signout}/>
           <Route path="/registration" component={Registration}/>
           <Route path="/userprofile" component={UserProfile}/>
         </div>

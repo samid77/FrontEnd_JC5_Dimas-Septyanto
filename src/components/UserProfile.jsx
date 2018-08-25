@@ -1,8 +1,18 @@
 import React, { Component } from 'react'
 import Navbar from './Navbar';
 import Footers from './Footers';
+import Cookies from 'universal-cookie';
 
 class UserProfile extends Component {
+  state = {
+      username: '',
+      fullname: '',
+      address: '',
+      email: '',
+      phone: '',
+      sales: [],
+      userphoto: '',
+  }
   render() {
     return (
       <div>

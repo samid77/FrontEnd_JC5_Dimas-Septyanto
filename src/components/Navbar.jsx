@@ -1,12 +1,18 @@
 // Header.js
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
+import axios from 'axios';
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
 
 const aStyle = {
   marginTop: '10px'
 }
 
-export default class Header extends Component {
+class Navbar extends Component {
+    state = {
+      profileArea: '',
+    }
     render(){
         return (
           <header className="main-header">
@@ -32,7 +38,8 @@ export default class Header extends Component {
                               </div>
                           </form>
                           <ul className="nav navbar-nav">
-                            <li><Link to="/signin"><i className="fa fa-user"></i> Login / Register</Link></li>
+                            {/* <li><Link to="/signin"><i className="fa fa-user"></i> Login / Register</Link></li> */}
+                            {this.props.loginbutton}
                           </ul>
                       </div>
 
@@ -148,24 +155,22 @@ export default class Header extends Component {
                                   </li>
                                 </ul>
                               </li>
-
                               <li className="dropdown user user-menu">
                                 <a href="#" className="dropdown-toggle" data-toggle="dropdown">
-                                  <img src="dist/img/samid.jpg" className="user-image" alt="User Image"/>
-                                  <span className="hidden-xs">Dimas Septyanto</span>
+                                  <img src={'http://localhost:8005/pics/'+ this.props.userphoto}className="user-image" alt="User Image"/>
+                                  <span className="hidden-xs">{this.props.fullname}</span>
                                 </a>
                                 <ul className="dropdown-menu">
                                   <li className="user-header">
-                                    <img src="dist/img/samid.jpg" className="img-circle" alt="User Image"/>
+                                    <img src={'http://localhost:8005/pics/'+ this.props.userphoto} className="img-circle" alt="User Image"/>
                                     <p>
-                                      Dimas Septyanto
-                                      <small>Member since Nov. 2012</small>
+                                      {this.props.fullname}
                                     </p>
                                   </li>
                                   <li className="user-footer">
                                     <div className="text-center">
                                       <Link to="/userprofile" className="btn btn-success btn-flat" style={aStyle}><i className="fa fa-user"></i> Profile</Link>&nbsp;
-                                      <Link to="/login" className="btn btn-danger btn-flat" style={aStyle}><i className="fa fa-sign-out"></i> Sign out</Link>
+                                      <Link to="/signout" className="btn btn-danger btn-flat" style={aStyle}><i className="fa fa-sign-out"></i> Sign out</Link>
                                     </div>
                                   </li>
                                 </ul>
@@ -180,3 +185,4 @@ export default class Header extends Component {
         )
     }
 }
+export default Navbar;
