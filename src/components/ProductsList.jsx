@@ -62,6 +62,15 @@ class ProductList extends Component {
         })
     }
   }
+  filterCategory = (e) => {
+      axios.post('http://localhost:8005/getByCategory', {
+          catID: e
+      }).then((response) => {
+          this.setState({
+            productList: response.data
+          });
+      })
+  }
 
   constructor() {
     super();
