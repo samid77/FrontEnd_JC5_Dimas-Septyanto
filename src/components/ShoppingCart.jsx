@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Navbar from './Navbar';
 import Footers from './Footers';
 import {Link, Redirect} from 'react-router-dom';
-import photo from './pics/DEWALT_001.jpg'
 import Cookies from 'universal-cookie';
 import axios from 'axios';
 import $ from 'jquery';
@@ -22,7 +21,6 @@ class ShoppingCart extends Component {
       totalPerItem: [],
       grandTotal: 0,
       deliveryMethod: [],
-      subPrice: [],
       deliveryCost: 0,
       emptycart: ['Cart is empty'],
   }
@@ -49,14 +47,13 @@ class ShoppingCart extends Component {
             var datacart = cartData.data[0];
             var totalPerItem = cartData.data[1];
             var status = cartData.data[0][0].status;
-            console.log(status);
 
             if(status === 2){
               this.setState({
                 detailCart: datacart,
                 totalPerItem: totalPerItem,
               })
-              console.log(this.state.detailCart);
+              
             } else if(status !== 2){
               this.setState({
                 detailCart: [],
@@ -99,11 +96,11 @@ class ShoppingCart extends Component {
 
           this.setState({
             detailCart: cartData,
-            subPrice: subPrice,
+            totalPerItem: subPrice,
           });
 
           var totalPrice = 0;
-          var listPrice = this.state.subPrice;
+          var listPrice = this.state.totalPerItem;
           for(var i=0; i < listPrice.length; i++){
             var totalPrice = totalPrice + listPrice[i].total_sub_price;
           }
@@ -121,16 +118,18 @@ class ShoppingCart extends Component {
       cartID: id,
       userID: userID
     }).then((response) => {
+      console.log(response.data);
       var cartData = response.data[0];
       var totalPerItem = response.data[1];
+      // console.log(totalPerItem);
 
       this.setState({
         detailCart: cartData,
-        subPrice: totalPerItem,
+        totalPerItem: totalPerItem,
       });
 
       var totalPrice = 0;
-      var listPrice = this.state.subPrice;
+      var listPrice = this.state.totalPerItem;
       for(var i=0; i < listPrice.length; i++){
         totalPrice = totalPrice + listPrice[i].total_sub_price;
       }

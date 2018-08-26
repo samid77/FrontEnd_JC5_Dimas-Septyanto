@@ -14,12 +14,23 @@ const cookies = new Cookies();
 class Checkout extends Component {
    state = {
         fullname: '',
+        sendername: '',
         username:'',
         userphoto: '',
+        useremail: '',
+        userphone: '',
+        useraddress: '',
         userID: '',
         isLoggedin: false,
         loginbutton: <li><Link to="/signin"><i className="fa fa-user"></i> Login / Register</Link></li>,
         profileArea: false,
+        grandTotal: 0,
+        tax: 0,
+        deliveryList: [],
+        bankList: [],
+        deliveryPrice: 15000,
+        totalPayment: 0,
+        defaultDeliv: '',
   }
   componentWillMount = () => {
     if(cookies.get('userSession') !== undefined) {
@@ -31,13 +42,146 @@ class Checkout extends Component {
                 loginbutton: <li></li>,
                 userID: response.data[0].id,
                 fullname: response.data[0].full_name,
+                sendername: response.data[0].full_name,
                 userphoto: response.data[0].user_image,
+                useremail: response.data[0].email,
+                userphone: response.data[0].phone,
+                useraddress: response.data[0].address,
                 profileArea: true,
             })
         })
+        axios.get('http://localhost:8005/getBank').then((bank) => {
+            this.setState({
+                bankList: bank.data
+            });
+        })
+        axios.get('http://localhost:8005/getDelivery').then((delivery) => {
+            this.setState({
+                deliveryList: delivery.data
+            });
+        })
+        axios.post('http://localhost:8005/displayCart', {
+          userID: cookies.get('userSession'),
+        }).then((cartData) => {
+          var totalCart = cartData.data[0].length;
+          if(totalCart > 0){
+            var datacart = cartData.data[0];
+            var totalPerItem = cartData.data[1];
+            var status = cartData.data[0][0].status;
+
+            if(status === 2){
+              this.setState({
+                detailCart: datacart,
+                totalPerItem: totalPerItem,
+              })
+              
+            } else if(status !== 2){
+              this.setState({
+                detailCart: [],
+              });
+            }
+
+            var totalPrice = 0;
+            var itemPrice = this.state.totalPerItem;
+            for(var i=0; i < itemPrice.length; i++){
+              totalPrice = totalPrice + itemPrice[i].total_sub_price;
+            }
+            var totalPayment = totalPrice + totalPrice * (10/100) + this.state.deliveryPrice;
+            this.setState({
+              grandTotal: totalPrice,
+              tax: totalPrice * (10/100),
+              totalPayment: totalPayment,
+            });
+          } else {
+            this.setState({
+              detailCart: []
+            });
+          }
+        })
     }
   }
+  changeDelivCost = (e) => {
+      var delivID = e.target.value;
+      delivID = parseInt(delivID, 10);
+      var listdelivery = this.state.deliveryList;
+      for(var i=0; i < listdelivery.length; i++){
+          if(listdelivery[i].id === delivID){
+              var delivprice = listdelivery[i].price;
+          }
+      }
+      var totalPayment = this.state.grandTotal + this.state.grandTotal * (10/100) + delivprice;
+      this.setState({
+        deliveryPrice: delivprice,
+        totalPayment: totalPayment,
+      });
+  }
+  changeName = (e) => {
+      this.setState({
+          sendername: e.target.value,
+      });
+  }
+  sendToInvoice = () => {
+    var fullname = this.refs.fullname;
+    var email = this.refs.email;
+    var address = this.refs.address;
+    var phone = this.refs.phone;
+    var bank = this.refs.bank;
+    var delivery = this.refs.delivery;
+
+    axios.post('http://localhost:8005/displayCart', {
+          userID: cookies.get('userSession'),
+        }).then((cartData) => {
+          var totalCart = cartData.data[0].length;
+          if(totalCart > 0){
+            var datacart = cartData.data[0];
+            var totalPerItem = cartData.data[1];
+            var status = cartData.data[0][0].status;
+
+            if(status === 2){
+              this.setState({
+                detailCart: datacart,
+                totalPerItem: totalPerItem,
+              })
+              
+            } else if(status !== 2){
+              this.setState({
+                detailCart: [],
+              });
+            }
+
+            var totalPrice = 0;
+            var itemPrice = this.state.totalPerItem;
+            for(var i=0; i < itemPrice.length; i++){
+              totalPrice = totalPrice + itemPrice[i].total_sub_price;
+            }
+            var totalPayment = totalPrice + totalPrice * (10/100) + this.state.deliveryPrice;
+            this.setState({
+              grandTotal: totalPrice,
+              tax: totalPrice * (10/100),
+              totalPayment: totalPayment,
+            });
+          } else {
+            this.setState({
+              detailCart: []
+            });
+          }
+    })
+  }
   render() {
+    const bankList = this.state.bankList.map((item, index) => {
+        var urutan = index + 1;
+        var bankID = item.id;
+        var bankName = item.bank_name;
+        var bankAccount = item.account;
+        return <option key={urutan} value={bankName}>{bankName}</option>
+    })
+    const deliveryList = this.state.deliveryList.map((item, index) => {
+        var urutan = index + 1;
+        var delivID = item.id;
+        var delivMethod = item.method;
+        var delivPrice = item.price;
+        return <option key={urutan} value={delivID}>{delivMethod}</option>
+    })
     return (
       <div>
           <Navbar loginbutton={this.state.loginbutton} fullname={this.state.fullname} userphoto={this.state.userphoto} profile={this.props.profileArea} />
@@ -52,28 +196,25 @@ class Checkout extends Component {
                                 <form role="form">
                                     <div className="form-group">
                                         <label>Full Name</label>
-                                        <input type="text" className="form-control" placeholder="Enter your full name" />
+                                        <input type="text" ref="fullname" className="form-control" placeholder="Enter your full name" onChange={this.changeName} value={this.state.sendername}/>
                                     </div>
                                     <div className="form-group">
                                         <label>Email</label>
-                                        <input type="email" className="form-control" placeholder="Email Address" />
+                                        <input type="email" ref="email" onChange={this.changeEmail} value={this.state.useremail} className="form-control" placeholder="Email Address" />
                                     </div>
                                     <div className="form-group">
                                         <label>Phone Number</label>
-                                        <input type="number" className="form-control" placeholder="Phone Number" />
+                                        <input type="text" ref="phone" onChange={this.changePhone}  value={this.state.userphone} className="form-control" placeholder="Phone Number" />
                                     </div>
                                     <div className="form-group">
                                         <label>Delivery Address</label>
-                                        <textarea className="form-control"></textarea>
+                                        <input type="text" ref="delivery" onChange={this.changeAddress}  value={this.state.useraddress} className="form-control" placeholder="Address" />
                                     </div>
                                 <h3><b>Payment Method</b> <span><img style={{width: '40px', height:'40px'}} src={cash}/></span></h3>
                                     <div className="form-group">
                                         <label>Bank Transfer</label>
-                                        <select class="form-control">
-                                            <option>BNI</option>
-                                            <option>Mandiri</option>
-                                            <option>BCA</option>
-                                            <option>BTPN</option>
+                                        <select ref="bank" class="form-control">
+                                            {bankList}
                                         </select>
                                     </div>
                                     
@@ -81,23 +222,9 @@ class Checkout extends Component {
                                 <hr />
                                     <div className="form-group">
                                         <label>Domestic</label>
-                                        <select class="form-control">
-                                            <option>Go-Send</option>
-                                            <option>Pos Indonesia</option>
-                                            <option>Ninja Express</option>
-                                            <option>JNE</option>
+                                        <select onChange={this.changeDelivCost} ref="delivery" class="form-control">
+                                            {deliveryList}
                                         </select>
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Abroad Delivery</label>
-                                        <select class="form-control">
-                                            <option>DHL</option>
-                                            <option>FedEx</option>
-                                        </select>
-                                    </div>
-                                    <div className="form-group">
-                                        <Link to="/invoice">
-                                        <button className="btn btn-lg btn-block btn-success"><i className="fa fa-paper-plane"></i> Submit</button></Link>
                                     </div>
                                 </form>
                             </div>
@@ -108,16 +235,18 @@ class Checkout extends Component {
                                 <hr />
                                 <dl className="dl-horizontal" style={{fontSize: '18px'}}>
                                     <dt style={{textAlign: 'left'}}>Product(s) Total</dt>
-                                    <dd>Rp.550.000,00</dd>
+                                    <dd>Rp.{this.state.grandTotal}</dd>
                                     <dt style={{textAlign: 'left'}}>Tax (10%)</dt>
-                                    <dd>Rp.55.000,00</dd>
-                                    <dt style={{textAlign: 'left'}}>Shipping Payment</dt>
-                                    <dd>Rp.50.000,00</dd>
+                                    <dd>Rp.{this.state.tax}</dd>
+                                    <dt style={{textAlign: 'left'}}>Delivery Cost</dt>
+                                    <dd>Rp.{this.state.deliveryPrice}</dd>
                                     <hr />
                                     <dt style={{textAlign: 'left'}}>Total Payment</dt>
-                                    <dd>Rp.655.000,00</dd>
+                                    <dd>Rp.{this.state.totalPayment}</dd>
                                 </dl>
                             </div>
+                            <button type="button" onClick={() => this.sendToInvoice(this.refs)} className="btn btn-lg btn-block btn-success"><i className="fa fa-paper-plane"></i> Submit</button>
+                            <Link to="/cart" className="btn btn-warning btn-lg btn-flat btn-block"><i className="fa fa-shopping-cart"></i> Back to cart</Link>
                         </div>
                     </div>
                 </section>

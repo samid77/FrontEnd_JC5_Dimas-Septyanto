@@ -15,6 +15,9 @@ class Invoices extends Component {
     username:'',
     userphoto: '',
     userID: '',
+    userphone: '',
+    useremail: '',
+    useraddress: '',
     isLoggedin: false,
     loginbutton: <li><Link to="/signin"><i className="fa fa-user"></i> Login / Register</Link></li>,
     profileArea: false,
@@ -29,7 +32,10 @@ class Invoices extends Component {
                 loginbutton: <li></li>,
                 userID: response.data[0].id,
                 fullname: response.data[0].full_name,
+                useraddress: response.data[0].address,
                 userphoto: response.data[0].user_image,
+                userphone: response.data[0].phone,
+                useremail: response.data[0].email,
                 profileArea: true,
             })
         })
@@ -66,21 +72,19 @@ class Invoices extends Component {
                                             From
                                             <address>
                                                 <strong>WiseMonkey, Inc.</strong><br />
-                                                795 Folsom Ave, Suite 600<br />
-                                                San Francisco, CA 94107<br />
+                                                Wisma Bakrie, Floor 24<br />
                                                 Phone: (804) 123-5432<br />
-                                                Email: info@almasaeedstudio.com
+                                                Email: info@wisemonkey.com
                                             </address>
                                         </div>
                                         {/* /.col */}
                                         <div className="col-sm-4 invoice-col">
                                             To
                                             <address>
-                                                <strong>John Doe</strong><br />
-                                                795 Folsom Ave, Suite 600<br />
-                                                San Francisco, CA 94107<br />
-                                                Phone: (555) 539-1037<br />
-                                                Email: john.doe@example.com
+                                                <strong>{this.state.fullname}</strong><br />
+                                                {this.state.useraddress}<br />
+                                                Phone: {this.state.userphone}<br />
+                                                Email: {this.state.useremail}
                                             </address>
                                         </div>
                                         {/* /.col */}
@@ -102,7 +106,7 @@ class Invoices extends Component {
                                                 <tr>
                                                     <th>Qty</th>
                                                     <th>Product</th>
-                                                    <th>Serial #</th>
+                                                    <th>Code</th>
                                                     <th>Description</th>
                                                     <th>Subtotal</th>
                                                 </tr>

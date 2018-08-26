@@ -1,22 +1,58 @@
 import React, { Component } from 'react'
+import {Link, Redirect} from 'react-router-dom'
 import Navbar from './Navbar';
 import Footers from './Footers';
 import Cookies from 'universal-cookie';
+import axios from 'axios';
+
+const cookies = new Cookies();
 
 class UserProfile extends Component {
   state = {
-      username: '',
-      fullname: '',
-      address: '',
-      email: '',
-      phone: '',
-      sales: [],
-      userphoto: '',
+    fullname: '',
+    username:'',
+    userphoto: '',
+    useremail: '',
+    userphone: '',
+    useraddress: '',
+    userID: '',
+    isLoggedin: false,
+    loginbutton: <li><Link to="/signin"><i className="fa fa-user"></i> Login / Register</Link></li>,
+    profileArea: false,
+    userFullName: '',
+    userName: '',
+    userEmail: '',
+    userAddress: '',
+    userpassword: '',
+  }
+  componentWillMount = () => {
+    if(cookies.get('userSession') !== undefined) {
+        axios.post('http://localhost:8005/getUserData', {
+            userID: cookies.get('userSession')
+        }).then((response) => {
+            this.setState({
+                isLoggedin: true,
+                loginbutton: <li></li>,
+                userID: response.data[0].id,
+                fullname: response.data[0].full_name,
+                userName: response.data[0].username,
+                userFullName: response.data[0].full_name,
+                userphoto: response.data[0].user_image,
+                useremail: response.data[0].email,
+                userpassword: response.data[0].password,
+                userEmail: response.data[0].email,
+                userphone: response.data[0].phone,
+                useraddress: response.data[0].address,
+                userAddress: response.data[0].address,
+                profileArea: true,
+            })
+        })
+    }
   }
   render() {
     return (
       <div>
-        <Navbar />
+        <Navbar loginbutton={this.state.loginbutton} fullname={this.state.fullname} userphoto={this.state.userphoto} profile={this.props.profileArea}/>
         <div className="content-wrapper">
             <div className="container">
                 <section className="content" style={{minHeight: '700px'}}>
@@ -25,23 +61,24 @@ class UserProfile extends Component {
                             <div className="box box-primary">
                             {/* /.box-header */}
                             <div className="box-body">
-                                <img className="profile-user-img img-responsive img-circle" src="../../dist/img/samid.jpg" alt="User profile picture" />
-                                <h3 className="profile-username text-center">Dimas Septyanto</h3>
-                                <p className="text-muted text-center">Software Engineer</p><hr />
+                                <img className="profile-user-img img-responsive img-circle" src={'http://localhost:8005/pics/'+this.state.userphoto} alt="User profile picture" />
+                                <h3 className="profile-username text-center">{this.state.fullname}</h3>
+                                {/* <p className="text-muted text-center">Software Engineer</p> */}
+                                <hr />
                                 <strong><i className="fa fa-envelope-o margin-r-5" /> Email</strong>
-                                <p className="text-muted">
-                                dimaseptyanto@windowslive.com
-                                </p><hr />
+                                    <p className="text-muted">
+                                    {this.state.useremail}
+                                    </p><hr />
                                 <strong><i className="fa fa-phone margin-r-5" /> Phone</strong>
-                                <p className="text-muted">
-                                081285972197
-                                </p><hr />
+                                    <p className="text-muted">
+                                    081285972197
+                                    </p><hr />
                                 <strong><i className="fa fa-map-marker margin-r-5" /> Address</strong>
-                                <p className="text-muted">
-                                Graha Indah Blok A11 No.5, Bekasi, 17421
-                                </p><hr />
+                                    <p className="text-muted">
+                                    {this.state.useraddress}
+                                    </p><hr />
                                 <strong><i className="fa fa-file-text-o margin-r-5" /> Notes</strong>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
                             </div>
                             {/* /.box-body */}
                             </div>
@@ -107,48 +144,39 @@ class UserProfile extends Component {
                                 <div className="tab-pane" id="settings">
                                     <form className="form-horizontal">
                                         <div className="form-group">
-                                        <label htmlFor="inputName" className="col-sm-2 control-label">Name</label>
-                                        <div className="col-sm-10">
-                                            <input type="email" className="form-control" id="inputName" placeholder="Name" />
-                                        </div>
-                                        </div>
-                                        <div className="form-group">
-                                        <label htmlFor="inputEmail" className="col-sm-2 control-label">Email</label>
-                                        <div className="col-sm-10">
-                                            <input type="email" className="form-control" id="inputEmail" placeholder="Email" />
-                                        </div>
-                                        </div>
-                                        <div className="form-group">
-                                        <label htmlFor="inputName" className="col-sm-2 control-label">Name</label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputName" placeholder="Name" />
-                                        </div>
-                                        </div>
-                                        <div className="form-group">
-                                        <label htmlFor="inputExperience" className="col-sm-2 control-label">Experience</label>
-                                        <div className="col-sm-10">
-                                            <textarea className="form-control" id="inputExperience" placeholder="Experience" defaultValue={""} />
-                                        </div>
-                                        </div>
-                                        <div className="form-group">
-                                        <label htmlFor="inputSkills" className="col-sm-2 control-label">Skills</label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputSkills" placeholder="Skills" />
-                                        </div>
-                                        </div>
-                                        <div className="form-group">
-                                        <div className="col-sm-offset-2 col-sm-10">
-                                            <div className="checkbox">
-                                            <label>
-                                                <input type="checkbox" /> I agree to the <a href="#">terms and conditions</a>
-                                            </label>
+                                            <label className="col-sm-2 control-label">Full Name</label>
+                                            <div className="col-sm-10">
+                                                <input type="text" className="form-control" id="inputName" value={this.state.userFullName} placeholder="Name" />
                                             </div>
                                         </div>
+                                        <div className="form-group">
+                                            <label className="col-sm-2 control-label">Username</label>
+                                            <div className="col-sm-10">
+                                                <input type="text" value={this.state.userName}className="form-control" id="inputName" placeholder="Name" />
+                                            </div>
                                         </div>
                                         <div className="form-group">
-                                        <div className="col-sm-offset-2 col-sm-10">
-                                            <button type="submit" className="btn btn-danger">Submit</button>
+                                            <label className="col-sm-2 control-label">Email</label>
+                                            <div className="col-sm-10">
+                                                <input type="email" value={this.state.userEmail} className="form-control" />
+                                            </div>
                                         </div>
+                                        <div className="form-group">
+                                            <label className="col-sm-2 control-label">Password</label>
+                                            <div className="col-sm-10">
+                                                <input type="password" value={this.state.userpassword} className="form-control" />
+                                            </div>
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="col-sm-2 control-label">Address</label>
+                                            <div className="col-sm-10">
+                                                <input type="text"  value={this.state.userAddress} className="form-control" />
+                                            </div>
+                                        </div>
+                                        <div className="form-group">
+                                            <div className="col-sm-offset-2 col-sm-10">
+                                                <button type="submit" className="btn btn-danger">Submit</button>
+                                            </div>
                                         </div>
                                     </form>
                                 </div>
