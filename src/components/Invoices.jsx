@@ -21,6 +21,12 @@ class Invoices extends Component {
     isLoggedin: false,
     loginbutton: <li><Link to="/signin"><i className="fa fa-user"></i> Login / Register</Link></li>,
     profileArea: false,
+    item: [],
+    invoicenumber: '',
+    isRedirect: false,
+    paymentMethod: '',
+    createdTime: '',
+    totalPayment: 0,
   }
   componentWillMount = () => {
     if(cookies.get('userSession') !== undefined) {
@@ -39,9 +45,50 @@ class Invoices extends Component {
                 profileArea: true,
             })
         })
+        axios.post('http://localhost:8005/getInvoiceData', {
+            userID: cookies.get('userSession')
+        }).then((response) => {
+            console.log(response.data);
+            this.setState({
+                item: response.data,
+                invoicenumber: response.data[0].invoice_number,
+                paymentMethod: response.data[0].payment_method,
+                createdTime: response.data[0].created,
+            });
+            
+        })
     }
   }
+  confirmPayment = () => {
+      axios.post('http://localhost:8005/confirmPayment', {
+        userID: cookies.get('userSession')
+      }).then((response) => {
+          if(response.data === 1){
+              this.setState({
+                  isRedirect: true,
+              });
+          }
+      })
+  }
+
   render() {
+    const itemList = this.state.item.map((isi, index) => {
+        var urutan = index + 1;
+        var invoice_number = isi.invoice_number;
+        var productName = isi.product_name;
+        var quantity = isi.quantity;
+        var address = isi.shipping_address
+        var price = isi.total;
+
+        return <tr key={urutan}>
+        <td>{quantity}</td>
+        <td>{productName}</td>
+        <td>{price}</td>
+        </tr>
+    })
+    if(this.state.isRedirect){
+        return <Redirect to="/"/>
+    }
     return (
       <div>
           <Navbar loginbutton={this.state.loginbutton} fullname={this.state.fullname} userphoto={this.state.userphoto} profile={this.props.profileArea}/>
@@ -61,7 +108,7 @@ class Invoices extends Component {
                                         <div className="col-xs-12">
                                             <h2 className="page-header">
                                                 <img src={monkey} style={{width:'30px'}}/> WiseMonkey, Inc.
-                                                <small className="pull-right">Date: 2/09/2018</small>
+                                                <small className="pull-right">Date: {this.state.createdTime}</small>
                                             </h2>
                                         </div>
                                         {/* /.col */}
@@ -89,11 +136,9 @@ class Invoices extends Component {
                                         </div>
                                         {/* /.col */}
                                         <div className="col-sm-4 invoice-col">
-                                            <b>Invoice #007612</b><br />
+                                            <b>Invoice #INV{this.state.invoicenumber}</b><br />
                                             <br />
-                                            <b>Order ID:</b> 4F3S8J<br />
-                                            <b>Payment Due:</b> 2/22/2014<br />
-                                            <b>Account:</b> 968-34567
+                                            <b>Payment Due:</b> 10/09/2018<br />
                                         </div>
                                         {/* /.col */}
                                     </div>
@@ -106,40 +151,11 @@ class Invoices extends Component {
                                                 <tr>
                                                     <th>Qty</th>
                                                     <th>Product</th>
-                                                    <th>Code</th>
-                                                    <th>Description</th>
                                                     <th>Subtotal</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>Call of Duty</td>
-                                                    <td>455-981-221</td>
-                                                    <td>El snort testosterone trophy driving gloves handsome</td>
-                                                    <td>$64.50</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>Need for Speed IV</td>
-                                                    <td>247-925-726</td>
-                                                    <td>Wes Anderson umami biodiesel</td>
-                                                    <td>$50.00</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>Monsters DVD</td>
-                                                    <td>735-845-642</td>
-                                                    <td>Terry Richardson helvetica tousled street art master</td>
-                                                    <td>$10.70</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>Grown Ups Blue Ray</td>
-                                                    <td>422-568-642</td>
-                                                    <td>Tousled lomo letterpress</td>
-                                                    <td>$25.99</td>
-                                                </tr>
+                                                    {itemList}
                                                 </tbody>
                                             </table>
                                         </div>
@@ -149,11 +165,12 @@ class Invoices extends Component {
                                     <div className="row">
                                         {/* accepted payments column */}
                                         <div className="col-xs-6">
-                                        <p className="lead">Payment Methods:</p>
-                                        <img src="../../dist/img/credit/visa.png" alt="Visa" />
+                                        <p className="lead">Payment Methods: {this.state.paymentMethod}</p>
+                                        {/* <img src="../../dist/img/credit/visa.png" alt="Visa" />
                                         <img src="../../dist/img/credit/mastercard.png" alt="Mastercard" />
                                         <img src="../../dist/img/credit/american-express.png" alt="American Express" />
-                                        <img src="../../dist/img/credit/paypal2.png" alt="Paypal" />
+                                        <img src="../../dist/img/credit/paypal2.png" alt="Paypal" /> */}
+                                        
                                         <p className="text-muted well well-sm no-shadow" style={{marginTop: 10}}>
                                             Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem plugg
                                             dopplr jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
@@ -161,24 +178,24 @@ class Invoices extends Component {
                                         </div>
                                         {/* /.col */}
                                         <div className="col-xs-6">
-                                            <p className="lead">Amount Due 2/22/2014</p>
+                                            <p className="lead">Amount Due 10/09/2018</p>
                                             <div className="table-responsive">
                                                 <table className="table">
                                                 <tbody><tr>
-                                                    <th style={{width: '50%'}}>Subtotal:</th>
-                                                    <td>$250.30</td>
+                                                    {/* <th style={{width: '50%'}}>Subtotal:</th>
+                                                    <td>{this.state.grandTotal}</td>
                                                     </tr>
                                                     <tr>
-                                                    <th>Tax (9.3%)</th>
-                                                    <td>$10.34</td>
+                                                    <th>Tax (10%)</th>
+                                                    <td>{this.state.tax}</td>
                                                     </tr>
                                                     <tr>
-                                                    <th>Shipping:</th>
-                                                    <td>$5.80</td>
+                                                    <th>Delivery:</th>
+                                                    <td>{this.state.deliveryPrice}</td>
                                                     </tr>
-                                                    <tr>
+                                                    <tr> */}
                                                     <th>Total:</th>
-                                                    <td>$265.24</td>
+                                                    <td>{this.state.totalPayment}</td>
                                                     </tr>
                                                 </tbody></table>
                                             </div>
@@ -189,7 +206,7 @@ class Invoices extends Component {
                                     {/* this row will not appear when printing */}
                                     <div className="row no-print">
                                         <div className="col-xs-12">
-                                            <button type="button" className="btn btn-success pull-right"><i className="fa fa-credit-card" /> Confirm Payment
+                                            <button type="button" onClick={() => this.confirmPayment()} className="btn btn-success pull-right"><i className="fa fa-credit-card" /> Confirm Payment
                                             </button>
                                             <button type="button" className="btn btn-primary btn-flat pull-right" style={{marginRight: 5}}>
                                                 <i className="fa fa-print" /> Print Invoice

@@ -7,6 +7,7 @@ import axios from 'axios';
 
 const cookies = new Cookies();
 
+
 class UserProfile extends Component {
   state = {
     fullname: '',
@@ -24,6 +25,8 @@ class UserProfile extends Component {
     userEmail: '',
     userAddress: '',
     userpassword: '',
+    purchaseHistory: [],
+    unpaidPurchaseHistory: [],
   }
   componentWillMount = () => {
     if(cookies.get('userSession') !== undefined) {
@@ -47,9 +50,63 @@ class UserProfile extends Component {
                 profileArea: true,
             })
         })
+        axios.post('http://localhost:8005/getPaidHistory', {
+            userID: cookies.get('userSession')  
+        }).then((getData) => {
+            console.log(getData.data);
+            this.setState({
+                purchaseHistory: getData.data
+            });
+        })
+        axios.post('http://localhost:8005/getUnpaidHistory', {
+            userID: cookies.get('userSession')  
+        }).then((getData) => {
+            console.log(getData.data);
+            this.setState({
+                unpaidPurchaseHistory: getData.data
+            });
+        })
     }
   }
   render() {
+    const purchaseHistory = this.state.purchaseHistory.map((isi, index) => {
+        var urutan = index + 1;
+        var id = isi.id;
+        var invoiceNumber = isi.invoice_number;
+        var quantity = isi.quantity;
+        var productName = isi.product_name;
+        var date = isi.created;
+        var total = isi.total;
+        var status = isi.status;
+
+        return <tr key={urutan}>
+        <td>INV{invoiceNumber}</td>
+        <td>{productName}</td>
+        <td>{quantity}</td>
+        <td>Rp.{total}</td>
+        <td><span className="label label-success">paid</span></td>
+        <td>{date}</td>
+    </tr>
+    })
+    const unpaidPurchaseHistory = this.state.unpaidPurchaseHistory.map((isi, index) => {
+        var urutan = index + 1;
+        var id = isi.id;
+        var invoiceNumber = isi.invoice_number;
+        var quantity = isi.quantity;
+        var productName = isi.product_name;
+        var date = isi.created;
+        var total = isi.total;
+        var status = isi.status;
+
+        return <tr key={urutan}>
+        <td>INV{invoiceNumber}</td>
+        <td>{productName}</td>
+        <td>{quantity}</td>
+        <td>Rp.{total}</td>
+        <td><span className="label label-danger">unpaid</span></td>
+        <td>{date}</td>
+    </tr>
+    })
     return (
       <div>
         <Navbar loginbutton={this.state.loginbutton} fullname={this.state.fullname} userphoto={this.state.userphoto} profile={this.props.profileArea}/>
@@ -88,7 +145,8 @@ class UserProfile extends Component {
                         <div className="col-md-9">
                             <div className="nav-tabs-custom">
                             <ul className="nav nav-tabs">
-                                <li className="active"><a href="#activity" data-toggle="tab">Purchase History</a></li>
+                                <li className="active"><a href="#activity" data-toggle="tab">Paid Purchase History</a></li>
+                                <li><a href="#timeline" data-toggle="tab">Unpaid Purchase History</a></li>
                                 <li><a href="#settings" data-toggle="tab">Edit Profile</a></li>
                             </ul>
                             <div className="tab-content">
@@ -106,36 +164,26 @@ class UserProfile extends Component {
                                             </tr>
                                             </thead>
                                             <tbody>
+                                                {purchaseHistory}
+                                            </tbody>
+                                        </table>
+                                        </div>
+                                </div>
+                                <div className="tab-pane" id="timeline">
+                                    <div className="table-responsive">
+                                        <table className="table no-margin">
+                                            <thead>
                                             <tr>
-                                                <td><a href="pages/examples/invoice.html">OR9842</a></td>
-                                                <td>Call of Duty IV</td>
-                                                <td>2</td>
-                                                <td>Rp.450.000,00</td>
-                                                <td><span className="label label-success">Shipped</span></td>
-                                                <td>
-                                                    21/08/2018
-                                                </td>
+                                                <th>Order ID</th>
+                                                <th>Product</th>
+                                                <th>Quantity</th>
+                                                <th>Total</th>
+                                                <th>Status</th>
+                                                <th>Date</th>
                                             </tr>
-                                            <tr>
-                                                <td><a href="pages/examples/invoice.html">OR1848</a></td>
-                                                <td>Samsung Smart TV</td>
-                                                <td>2</td>
-                                                <td>Rp.450.000,00</td>
-                                                <td><span className="label label-warning">Pending</span></td>
-                                                <td>
-                                                    21/08/2018
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><a href="pages/examples/invoice.html">OR7429</a></td>
-                                                <td>iPhone 6 Plus</td>
-                                                <td>2</td>
-                                                <td>Rp.450.000,00</td>
-                                                <td><span className="label label-danger">Delivered</span></td>
-                                                <td>
-                                                    21/08/2018
-                                                </td>
-                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                                {unpaidPurchaseHistory}
                                             </tbody>
                                         </table>
                                         </div>

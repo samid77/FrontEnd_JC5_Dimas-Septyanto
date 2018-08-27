@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import Navbar from './Navbar';
 import Footers from './Footers';
 import delivery from './pics/delivery.png';
@@ -31,6 +31,7 @@ class Checkout extends Component {
         deliveryPrice: 15000,
         totalPayment: 0,
         defaultDeliv: '',
+        redirectInvoice: false
   }
   componentWillMount = () => {
     if(cookies.get('userSession') !== undefined) {
@@ -120,52 +121,32 @@ class Checkout extends Component {
           sendername: e.target.value,
       });
   }
-  sendToInvoice = () => {
-    var fullname = this.refs.fullname;
-    var email = this.refs.email;
-    var address = this.refs.address;
-    var phone = this.refs.phone;
-    var bank = this.refs.bank;
-    var delivery = this.refs.delivery;
+  sendToInvoice = (e) => {
+    var fullname = e.fullname.value;
+    var email = e.email.value;
+    var address = e.address.value;
+    var phone = e.phone.value;
+    var bank = e.bank.value;
+    var delivery = e.delivery.value;
+    var listCart = this.state.detailCart;
 
-    axios.post('http://localhost:8005/displayCart', {
-          userID: cookies.get('userSession'),
-        }).then((cartData) => {
-          var totalCart = cartData.data[0].length;
-          if(totalCart > 0){
-            var datacart = cartData.data[0];
-            var totalPerItem = cartData.data[1];
-            var status = cartData.data[0][0].status;
-
-            if(status === 2){
-              this.setState({
-                detailCart: datacart,
-                totalPerItem: totalPerItem,
-              })
-              
-            } else if(status !== 2){
-              this.setState({
-                detailCart: [],
-              });
-            }
-
-            var totalPrice = 0;
-            var itemPrice = this.state.totalPerItem;
-            for(var i=0; i < itemPrice.length; i++){
-              totalPrice = totalPrice + itemPrice[i].total_sub_price;
-            }
-            var totalPayment = totalPrice + totalPrice * (10/100) + this.state.deliveryPrice;
+    axios.post('http://localhost:8005/insertInvoice', {
+        fullname: fullname,
+        email: email,
+        address: address,
+        phone: phone,
+        bank: bank,
+        delivery: delivery,
+        listCart: listCart,
+        
+    }).then((response) => {
+        if(response.data === 1){
             this.setState({
-              grandTotal: totalPrice,
-              tax: totalPrice * (10/100),
-              totalPayment: totalPayment,
+                redirectInvoice: true
             });
-          } else {
-            this.setState({
-              detailCart: []
-            });
-          }
-    })
+        }
+    });
+    console.log(fullname);
   }
   render() {
     const bankList = this.state.bankList.map((item, index) => {
@@ -182,6 +163,9 @@ class Checkout extends Component {
         var delivPrice = item.price;
         return <option key={urutan} value={delivID}>{delivMethod}</option>
     })
+    if(this.state.redirectInvoice){
+        return <Redirect to="/invoice"/>
+    }
     return (
       <div>
           <Navbar loginbutton={this.state.loginbutton} fullname={this.state.fullname} userphoto={this.state.userphoto} profile={this.props.profileArea} />
@@ -208,7 +192,7 @@ class Checkout extends Component {
                                     </div>
                                     <div className="form-group">
                                         <label>Delivery Address</label>
-                                        <input type="text" ref="delivery" onChange={this.changeAddress}  value={this.state.useraddress} className="form-control" placeholder="Address" />
+                                        <input type="text" ref="address" onChange={this.changeAddress}  value={this.state.useraddress} className="form-control" placeholder="Address" />
                                     </div>
                                 <h3><b>Payment Method</b> <span><img style={{width: '40px', height:'40px'}} src={cash}/></span></h3>
                                     <div className="form-group">
@@ -226,6 +210,8 @@ class Checkout extends Component {
                                             {deliveryList}
                                         </select>
                                     </div>
+                                    <button type="button" onClick={() => this.sendToInvoice(this.refs)} className="btn btn-lg btn-block btn-success"><i className="fa fa-paper-plane"></i> Submit</button>
+                                    <Link to="/cart" className="btn btn-warning btn-lg btn-flat btn-block"><i className="fa fa-shopping-cart"></i> Back to cart</Link>
                                 </form>
                             </div>
                         </div>
@@ -245,8 +231,6 @@ class Checkout extends Component {
                                     <dd>Rp.{this.state.totalPayment}</dd>
                                 </dl>
                             </div>
-                            <button type="button" onClick={() => this.sendToInvoice(this.refs)} className="btn btn-lg btn-block btn-success"><i className="fa fa-paper-plane"></i> Submit</button>
-                            <Link to="/cart" className="btn btn-warning btn-lg btn-flat btn-block"><i className="fa fa-shopping-cart"></i> Back to cart</Link>
                         </div>
                     </div>
                 </section>

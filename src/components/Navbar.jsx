@@ -62,14 +62,14 @@ class Navbar extends Component {
 
                       <div className="collapse navbar-collapse pull-left" id="navbar-collapse">
                           <ul className="nav navbar-nav"></ul>
-                          <form className="navbar-form navbar-left" role="search">
+                          {/* <form className="navbar-form navbar-left" role="search">
                               <div className="input-group">
                                   <input type="text" className="form-control" placeholder="Cari produk..." />
                                   <span className="input-group-addon bg-maroon">
                                       <i className="fa fa-search"></i>
                                   </span>
                               </div>
-                          </form>
+                          </form> */}
                           <ul className="nav navbar-nav">
                             {/* <li><Link to="/signin"><i className="fa fa-user"></i> Login / Register</Link></li> */}
                             {this.props.loginbutton}
@@ -84,7 +84,7 @@ class Navbar extends Component {
                                   {jumlahCart}
                                 </a>
                                 <ul className="dropdown-menu">
-                                  <li className="header">4 Barang di Cart Belanja Anda</li>
+                                  <li className="header">{jumlahCart} Barang di Cart Belanja Anda</li>
                                   <li>
                                     <ul className="menu">
                                       {cart}
