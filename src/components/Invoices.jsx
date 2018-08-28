@@ -27,6 +27,8 @@ class Invoices extends Component {
     paymentMethod: '',
     createdTime: '',
     totalPayment: 0,
+    deliveryList: [],
+    grandTotal: 0,
   }
   componentWillMount = () => {
     if(cookies.get('userSession') !== undefined) {
@@ -45,16 +47,38 @@ class Invoices extends Component {
                 profileArea: true,
             })
         })
+        
         axios.post('http://localhost:8005/getInvoiceData', {
             userID: cookies.get('userSession')
         }).then((response) => {
             console.log(response.data);
-            this.setState({
-                item: response.data,
-                invoicenumber: response.data[0].invoice_number,
-                paymentMethod: response.data[0].payment_method,
-                createdTime: response.data[0].created,
-            });
+            var totalCost = response.data;
+            axios.get('http://localhost:8005/getDelivery').then((delivery) => {
+                this.setState({
+                    deliveryList: delivery.data
+                });
+                var deliverylist = delivery.data;
+                for(var i=0; i < deliverylist.length; i++){
+                    if(deliverylist[i].id === response.data[0].delivery){
+                        var delivCost = deliverylist[i].price;
+                    }
+                }
+                this.setState({
+                    item: response.data,
+                    itemID: response.data[0].id,
+                    invoicenumber: response.data[0].invoice_number,
+                    paymentMethod: response.data[0].payment_method,
+                    createdTime: response.data[0].created,
+                });
+                var totalPayment = 0
+                for(var i=0; i < totalCost.length; i++){
+                    totalPayment += totalCost[i].total;
+                }
+                var tax = totalPayment * (10/100)
+                this.setState({
+                    totalPayment: totalPayment + tax + delivCost
+                });
+            })
             
         })
     }
