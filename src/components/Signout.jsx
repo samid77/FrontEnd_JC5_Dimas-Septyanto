@@ -7,7 +7,7 @@ class Signout extends Component {
   render() {
     cookies.remove('userSession');
     if(cookies.get('userSession') === undefined){
-        return <Redirect to="/signin"/>
+        return <Redirect to="/"/>
     }
     return (
       <div>
